@@ -35,10 +35,9 @@ Thread thread;
 Thread logthread;
 EventQueue queue;
 EventQueue logqueue(32 * EVENTS_EVENT_SIZE);
-int cnt;
 
 void event_logger();
-void log();
+void loggg(int i);
 void output();
 void FXOS8700CQ_readRegs(int addr, uint8_t * data, int len);
 void FXOS8700CQ_writeRegs(uint8_t * data, int len);
@@ -79,28 +78,24 @@ int main() {
     }
 }
 
-void log()
+void loggg(int i)
 {
-    // printf("???\r\n");
-    x[cnt] = t[0];
-    y[cnt] = t[1];
-    z[cnt] = t[2];
-    if (x[cnt] > 0.707 || x[cnt] < -0.707 || y[cnt] > 0.707 || y[cnt] < -0.707) {
-        tilt[cnt] = 1;
+    x[i] = t[0];
+    y[i] = t[1];
+    z[i] = t[2];
+    if (x[i] > 0.707 || x[i] < -0.707 || y[i] > 0.707 || y[i] < -0.707) {
+        tilt[i] = 1;
     }
     else {
-        tilt[cnt] = 0;
+        tilt[i] = 0;
     }
 }
 
 void event_logger()
 {
-    cnt = 0;
     for (int i = 0; i < 100; i++) {
         led = !led;
-        log();
-        cnt++;
-        // logqueue.call(&log);
+        logqueue.call(&loggg, i);
         wait(0.1);
     }
     output();
@@ -110,13 +105,13 @@ void output()
 {
     for (int i = 0; i < 100; i++) {
         wait(0.1);
-        pc.printf("%1.3f\r\n", x[i]);
+        pc.printf("%f\r\n", x[i]);
         wait(0.1);
-        pc.printf("%1.3f\r\n", y[i]);
+        pc.printf("%f\r\n", y[i]);
         wait(0.1);
-        pc.printf("%1.3f\r\n", z[i]);
+        pc.printf("%f\r\n", z[i]);
         wait(0.1);
-        pc.printf("%1.3f\r\n", tilt[i]);
+        pc.printf("%d\r\n", tilt[i]);
     }
 }
 

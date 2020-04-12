@@ -4,9 +4,9 @@ import serial
 import time
 
 t = np.arange(0, 10, 0.1)
-x = np.arange(100)
-y = np.arange(100)
-z = np.arange(100)
+x = np.arange(0, 1, 0.01)
+y = np.arange(0, 1, 0.01)
+z = np.arange(0, 1, 0.01)
 tilt = np.arange(100)
 
 serdev = '/dev/ttyACM0'
@@ -20,12 +20,17 @@ for i in range(100):
     line = s.readline()
     z[i] = float(line)
     line = s.readline()
-    tilt[i] = float(line)
+    tilt[i] = int(line)
     
 fig, ax = plt.subplots(2, 1)
-ax[0].plot(t, x)
-ax[0].plot(t, y)
-ax[0].plot(t, z)
-ax[1].plot(t, tilt)
+ax[0].plot(t, x, color='blue', linewidth=1, linestyle='-', label='x')
+ax[0].plot(t, y, color='red', linewidth=1, linestyle='-', label='y')
+ax[0].plot(t, z, color='green', linewidth=1, linestyle='-', label='z')
+ax[0].legend(loc='lower left')
+ax[0].set_xlabel('Time')
+ax[0].set_ylabel('Acc Vector')
+ax[1].stem(t, tilt)
+ax[1].set_xlabel('Time')
+ax[1].set_ylabel('Tilt')
 plt.show()
 s.close()
